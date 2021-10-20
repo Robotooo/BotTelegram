@@ -1,0 +1,38 @@
+{
+  "name": "bottelegram",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Robotooo/BotTelegram.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Robotooo/BotTelegram/issues"
+  },
+  "homepage": "https://github.com/Robotooo/BotTelegram#readme",
+  "dependencies": {
+    "axios": "^0.23.0",
+    "bot-brother": "^2.1.5",
+    "node-schedule": "^2.0.0",
+    "node-telegram-bot-api": "^0.54.0",
+    "node-telegram-operation-manager": "^1.2.0",
+    "puppeteer": "^10.4.0",
+    "qrcode-terminal": "^0.12.0",
+    "telegraf": "^4.4.2",
+    "tgfancy": "^0.13.0",
+    "typescript": "^4.4.4",
+    "wbm": "^1.1.16"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.1",
+    "nodemon": "^2.0.14",
+    "ts-node": "^10.3.0"
+  }
+}
