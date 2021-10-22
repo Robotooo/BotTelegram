@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/index.ts --exec ts-node --ignore *.json"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   },
   "homepage": "https://github.com/Robotooo/BotTelegram#readme",
   "dependencies": {
+    "api-telegram-bot": "^6.0.5",
     "axios": "^0.23.0",
     "bot-brother": "^2.1.5",
     "node-schedule": "^2.0.0",
