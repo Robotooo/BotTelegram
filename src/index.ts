@@ -13,5 +13,10 @@ bot.onText(/\/echo (.+)/, (msg?:any, match?:any) => {
 
 bot.onText(/\/info/, (msg?:any) => {
 	const chatId = msg.chat.id
-	bot.sendMessage(chatId, "No Info")
+	bot.sendMessage(chatId, "No joda")
 })
+
+bot.on('message', (msg?:any) => {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, 'Mensaje recibido');
+});
