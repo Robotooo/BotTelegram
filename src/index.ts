@@ -1,8 +1,10 @@
-const { Telegraf } = require('telegraf')
+import { Telegraf } from "telegraf";
 import axios, {AxiosResponse} from 'axios';
 import { authF } from './auth'
+import { consultas } from './consultas'
 const bot = new Telegraf('2069797539:AAFWwLYZjrftI4tHtoNVBMNIUE8m3PT_zHU')
-var token:authF
+var token:authF, consultasNew = new consultas;
+
 
 const config = {
     headers: { 
@@ -15,7 +17,7 @@ const bodyParameters = {
 	password: "botcito"
  };
 
-function conect(consulta:string, chat:string){
+function conect(consulta:number, chat:string){
 	
 	axios.post('http://localhost:8089/autentication/', bodyParameters, config)
 	.then((response)=>{
@@ -24,18 +26,16 @@ function conect(consulta:string, chat:string){
 		aux=token.jwt
 		console.log(response.status)
 		console.log(aux)
-		//const config2 = {headers: { Authorization: `bearer ${token}`}};
 	},(error)=>{
 		console.log(error)
 	})
 
-}
 
+}
 
 
 bot.command('/help', async(ctx:any) => {
 	var msg = ctx.message.text;
-	//conect("help","")
 	ctx.reply("/horario Devuelve el horario de la empresa\n/licencia Devuelve la formula de licencias comerciales\n" +
 	"/limpieza Devuelve la formula limpieza de vias\n/rutas Devuelve la formula rutas de buses\n" +
 	"/pendiente cedula Devuelve los pendientes asociados a una cedula")
@@ -43,31 +43,35 @@ bot.command('/help', async(ctx:any) => {
 
 bot.command('/horario', async(ctx:any) => {
 	var msg = ctx.message.text;
-	conect("horario","")
-	
+	conect(1,"")
 })
 
 bot.command('/licencia', async(ctx:any) => {
 	var msg = ctx.message.text;
-	conect("licencia","")
-
+	conect(1,"")
+	// axios.get('http://localhost:8089/roles/{all}',{headers: {
+	// 	Authorization: 'bearer ' + token.jwt,
+	// }}).then(resp => {
+	// 	ctx.reply(resp.data)
+	// 	console.log(resp.data);
+	// });
 })
 
 bot.command('/limpieza', async(ctx:any) => {
 	var msg = ctx.message.text;
-	conect("limpieza","")
+	conect(1,"")
 
 })
 
 bot.command('/rutas', async(ctx:any) => {
 	var msg = ctx.message.text;
-	conect("rutas","")
+	conect(1,"")
 
 })
 
 bot.command('/pendiente', async(ctx:any) => {
 	var msg = ctx.message.text;
-	conect("pendiente","")
+	conect(1,"")
 
 })
 

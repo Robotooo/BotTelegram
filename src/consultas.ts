@@ -3,8 +3,9 @@ import { Telegraf } from "telegraf";
 import { rolesF } from './parametros';
 
 export class consultas{
-        Roles(jwt: string, parametro: string, bot:Telegraf, chat:number){
-        axios.get('http://localhost:8089/roles/{all}'+parametro, 
+
+    Roles(jwt: string, bot:Telegraf, chat:number){
+        axios.get('http://localhost:8089/roles/{all}', 
         {headers: {
             Authorization: 'bearer ' + jwt,
         }}).then(response => {
