@@ -21,9 +21,17 @@ bot.command('/help', async(ctx:any) => {
 		bodyParameters,
 		config
 		)
-	const resp =  axios.get('http://localhost:8089/roles/{all}', config).then(console.log).catch(console.log);
+	//const resp = await axios.get('http://localhost:8089/roles/{all}', config).then(console.log).catch(console.log);
 
-	ctx.reply(resp)
+
+
+	axios.get('http://localhost:8089/roles/{all}',config).then(resp => {
+		ctx.reply(resp.data)
+		console.log(resp.data);
+	});
+
+
+	
 })
 
 bot.launch();
