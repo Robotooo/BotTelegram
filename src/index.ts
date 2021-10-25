@@ -1,12 +1,12 @@
 const { Telegraf } = require('telegraf')
 import axios, {AxiosResponse} from 'axios';
-import { authF } from './auth';
+import { authF } from './auth'
 const bot = new Telegraf('2069797539:AAFWwLYZjrftI4tHtoNVBMNIUE8m3PT_zHU')
-const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb2JvdG8iLCJpYXQiOjE2MzUxMzEyOTUsImV4cCI6MTYzNTE0MzI5NX0.UfnofsgYefIrVBbBehxobGwmhbyoTgtoXr4Gi-Ty0CLLgOAGRkkcFs0UY_fC9Dwz8J3xPBYjNu5Qiw6MlhKS5A";
+var token:authF
 
 const config = {
     headers: { 
-		Authorization: `bearer ${token}` 
+		'Content-Type': 'application/json'
 	}
 };
 
@@ -15,23 +15,64 @@ const bodyParameters = {
 	password: "botcito"
  };
 
+function conect(consulta:string, chat:string){
+	
+	axios.post('http://localhost:8089/autentication/', bodyParameters, config)
+	.then((response)=>{
+		token = response.data as authF
+		var aux:string
+		aux=token.jwt
+		console.log(response.status)
+		console.log(aux)
+		//const config2 = {headers: { Authorization: `bearer ${token}`}};
+	},(error)=>{
+		console.log(error)
+	})
+
+}
+
+
+
 bot.command('/help', async(ctx:any) => {
-	axios.post( 
-		'http://localhost:8089/autentication/',
-		bodyParameters,
-		config
-		)
-	//const resp = await axios.get('http://localhost:8089/roles/{all}', config).then(console.log).catch(console.log);
+	var msg = ctx.message.text;
+	//conect("help","")
+	ctx.reply("/horario Devuelve el horario de la empresa\n/licencia Devuelve la formula de licencias comerciales\n" +
+	"/limpieza Devuelve la formula limpieza de vias\n/rutas Devuelve la formula rutas de buses\n" +
+	"/pendiente cedula Devuelve los pendientes asociados a una cedula")
+})
 
-
-
-	axios.get('http://localhost:8089/roles/{all}',config).then(resp => {
-		ctx.reply(resp.data)
-		console.log(resp.data);
-	});
-
-
+bot.command('/horario', async(ctx:any) => {
+	var msg = ctx.message.text;
+	conect("horario","")
 	
 })
+
+bot.command('/licencia', async(ctx:any) => {
+	var msg = ctx.message.text;
+	conect("licencia","")
+
+})
+
+bot.command('/limpieza', async(ctx:any) => {
+	var msg = ctx.message.text;
+	conect("limpieza","")
+
+})
+
+bot.command('/rutas', async(ctx:any) => {
+	var msg = ctx.message.text;
+	conect("rutas","")
+
+})
+
+bot.command('/pendiente', async(ctx:any) => {
+	var msg = ctx.message.text;
+	conect("pendiente","")
+
+})
+
+bot.start((ctx: any) => ctx.reply('Bienvenido, Digita /help para visualizar los comandos disponibles'))
+
+
 
 bot.launch();
