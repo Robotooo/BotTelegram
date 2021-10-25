@@ -2,8 +2,7 @@ const { Telegraf } = require('telegraf')
 import axios, {AxiosResponse} from 'axios';
 import { authF } from './auth';
 const bot = new Telegraf('2069797539:AAFWwLYZjrftI4tHtoNVBMNIUE8m3PT_zHU')
-const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIwMTIzNDUzNzgyIiwiaWF0IjoxNjM1MTI2NTA2LCJleHAiOjE2MzUxMzg1MDZ9.vYjsaB1Fw-Dkxrr-7hF6qu7BWFvDDx-BtQWrt4yPRPz6WcIf1EGOApWl2Yv6hUzR3-kYi3hFD0HwtId6Cobhsg";
-
+const token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJyb2JvdG8iLCJpYXQiOjE2MzUxMzEyOTUsImV4cCI6MTYzNTE0MzI5NX0.UfnofsgYefIrVBbBehxobGwmhbyoTgtoXr4Gi-Ty0CLLgOAGRkkcFs0UY_fC9Dwz8J3xPBYjNu5Qiw6MlhKS5A";
 
 const config = {
     headers: { 
@@ -12,11 +11,9 @@ const config = {
 };
 
 const bodyParameters = {
-	cedula: "0123453782",
-	password: "Una2021"
+	cedula: "roboto",
+	password: "botcito"
  };
-
-
 
 bot.command('/help', async(ctx:any) => {
 	axios.post( 
@@ -24,11 +21,9 @@ bot.command('/help', async(ctx:any) => {
 		bodyParameters,
 		config
 		)
-		
-	let resp = axios.get('http://localhost:8089/roles/{all}', config).then(console.log).catch(console.log);
-	  
-	ctx.reply(resp);
-})
+	const resp =  axios.get('http://localhost:8089/roles/{all}', config).then(console.log).catch(console.log);
 
+	ctx.reply(resp)
+})
 
 bot.launch();
