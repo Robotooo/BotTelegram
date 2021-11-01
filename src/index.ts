@@ -3,7 +3,7 @@ import axios, {AxiosResponse} from 'axios'
 import { authF } from './mappers/auth'
 import { consultas } from './consultas'
 //import { start } from "repl"
-const bot = new Telegraf('2069797539:AAFWwLYZjrftI4tHtoNVBMNIUE8m3PT_zHU')
+const bot = new Telegraf('2070457111:AAFfAWLLLEcSSuYv92gBbyRQkyanywVO930')
 var token:authF, consultasNew = new consultas;
 
 const config = {
@@ -17,14 +17,15 @@ const bodyParameters = {
 	password: "botcito"
  }
 
-function conect(consulta:number, chat:number, parametro:string){
-	var error = false
+function conect(consulta:number, chat:number, parametro:string, bot:Telegraf){
+	var error = false;
 	axios.interceptors.response.use(response=>{
 		return response
 	},
-	err=>{const{config,response:{status, data}}=err; 
-		const requestAu = config
-		if(status==401 || data.message=="Unauthorized"){
+	err=>{const{config,response:{status, data}}=err;
+	console.log("entra el err")
+		const requestAu = config;
+		if(status==401){
 			axios.post('http://localhost:8089/autentication/', bodyParameters, config)
 			.then((response)=>{
 				// token = response.data as authF
@@ -33,9 +34,7 @@ function conect(consulta:number, chat:number, parametro:string){
 				NumeroConsulta(consulta,tokenBot.jwt,chat,bot,parametro)
 				console.log(response.status)
 				console.log("lol")
-				console.log(tokenBot.jwt)
-			},(error)=>{
-				console.log(error)
+				console.log("token---------" + tokenBot.jwt)
 			}).catch(err=>{console.log(err,err.response)})
 			error=true;
 		}else{
@@ -48,10 +47,32 @@ function conect(consulta:number, chat:number, parametro:string){
 	error=false;
 }
 
+/*function conect(consulta:number, chat:number, parametro:string){
+	
+	axios.post('http://localhost:8089/autentication/', bodyParameters, config)
+	.then((response)=>{
+		////token = response.data as authF
+		////var aux:string
+		//aux=token.jwt
+		//aux=token.jwt
+		//aux=token.jwt
+		//console.log(response.status)
+		//console.log(aux)
+		var tokenBot = response.data as authF
+		console.log(tokenBot)
+		NumeroConsulta(consulta,tokenBot.jwt,chat,bot,parametro)
+		console.log(response.status)
+		console.log("lol")
+	},(error)=>{
+		console.log("error:"+error)
+	})
+}*/
+
 function NumeroConsulta(nConsulta:number,jwt:string, nChat:number,botCommand:Telegraf, parametros:string){
 	switch(nConsulta){
 		case 1:
 			consultasNew.Roles(jwt,botCommand,nChat,parametros)
+			console.log("finito")
 			break
 	}
 }
@@ -69,7 +90,6 @@ bot.hears("a",async(ctx)=>{
 })
 
 
-
 bot.command('/help', async(ctx:any) => {
 	var msg = ctx.message.text
 	ctx.reply("/horario Devuelve el horario de la empresa\n/licencia Devuelve la formula de licencias comerciales\n" +
@@ -80,7 +100,7 @@ bot.command('/help', async(ctx:any) => {
 bot.command('/horario', async(ctx:any) => {
 	var msg = ctx.message.text
 	var parametro = msg.split(' ')
-	conect(1, ctx, parametro)
+	conect(1, ctx.from.id, parametro, bot)
 })
 
 bot.command('/licencia', async(ctx:any) => {
