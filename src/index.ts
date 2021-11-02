@@ -121,13 +121,15 @@ bot.command('/impuesto', async(ctx:any) => {
 	}
 })
 
-/*
 bot.on('message', async(ctx:any) => {
- 	var msg = ctx.message.text
- 	if(true){
- 		flag=false
+	var msg = ctx.message.text
+	axios.post('http://localhost:8089/autentication/', bodyParameters, configHeader)
+	.then(response=>{
+		token = response.data as authF
+	})
+	if(token==null){
+		ctx.reply("¡Hola " + ctx.from.first_name + "! Mi nombre es Roboto🤖, bienvenido al sistema de cobros de la municipalidad espero te encuentres bien, si deseas ver los comandos disponibles debes de digitar /ayuda")
 	}
-}) 
-*/
+})
 
 bot.launch()
