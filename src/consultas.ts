@@ -7,6 +7,10 @@ import { pago } from "./mappers/parametros";
 
 export class consultas{
 
+    PendienteImpuesto(jwt:string, bot:Telegraf, chat:number, parametros:string[]){
+
+    }
+
     PagosEntreFechas(jwt:string, bot:Telegraf, chat:number, parametros:string[]){
         axios.get('http://localhost:8089/cobros/PagosByCedulaAndFechasBetween/' +parametros[1] + '/' + parametros[2] + '/' + parametros[3],
         //axios.get('http://localhost:8089/cobros/PagosByCedulaAndFechasBetween/116380047/2021-08-01/2021-10-31'+parametros, 

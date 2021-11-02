@@ -59,6 +59,9 @@ function NumeroConsulta(nConsulta:number,jwt:string, nChat:number, botCommand:Te
 		case 4:
 			consultasNew.PagosEntreFechas(jwt, botCommand, nChat, parametros)
 			break
+		case 5:
+			consultasNew.PendienteImpuesto(jwt, botCommand, nChat, parametros)
+			break
 	}
 }
 
@@ -98,6 +101,16 @@ bot.command('/pagos', async(ctx:any) => {
 		connect(4, ctx.from.id, msg, bot)
 	} else{
 		ctx.reply("⚠️ Digite los datos necesarios (cedula, fecha inicio, fecha final) seguido del comando para realizar la consulta")
+	}
+})
+
+bot.command('/impuesto', async(ctx:any) => {
+	var msg = ctx.message.text.split(" ")
+	if(msg[1] != null && msg[2] != null){
+		console.log(msg)
+		//connect(5, ctx.from.id, msg, bot)
+	} else{
+		ctx.reply("⚠️ Digite los datos necesarios (cedula, tipo de impuesto) seguido del comando para realizar la consulta")
 	}
 })
 
