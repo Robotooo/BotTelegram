@@ -47,14 +47,17 @@ function NumeroConsulta(nConsulta:number,jwt:string, nChat:number, botCommand:Te
 	switch(nConsulta){
 		case 1:
 			bot.telegram.sendMessage(nChat,"⏳ Horario de atención al cliente ⏳")
-			consultasNew.Parametros(jwt,botCommand,nChat,parametros)
+			consultasNew.Parametros(jwt, botCommand,nChat, parametros)
 			break
 		case 2:
 			bot.telegram.sendMessage(nChat,"Comandos de Roboto🤖")
-			consultasNew.Parametros(jwt,botCommand,nChat,parametros)
+			consultasNew.Parametros(jwt, botCommand, nChat, parametros)
 			break
 		case 3:
-			consultasNew.CedPendiente(jwt,botCommand,nChat,parametros)
+			consultasNew.CedPendiente(jwt, botCommand, nChat, parametros)
+			break
+		case 4:
+			consultasNew.PagosEntreFechas(jwt, botCommand, nChat, parametros)
 			break
 	}
 }
@@ -85,14 +88,17 @@ bot.command('/pendiente', async(ctx:any) => {
 	if(msg[1] != null){
 		connect(3, ctx.from.id, msg[1], bot)
 	} else{
-		ctx.reply("⚠️ Digite el número de cedula seguido del comando, para realizar la consulta")
+		ctx.reply("⚠️ Digite el número de cedula seguido del comando para realizar la consulta")
 	}
 })
 
 bot.command('/pagos', async(ctx:any) => {
 	var msg = ctx.message.text.split(" ")
-	console.log(msg)
-	//connect(3, ctx.from.id, msg, bot)
+	if(msg[1] != null && msg[2] != null && msg[3] != null){
+		connect(4, ctx.from.id, msg, bot)
+	} else{
+		ctx.reply("⚠️ Digite los datos necesarios (cedula, fecha inicio, fecha final) seguido del comando para realizar la consulta")
+	}
 })
 
 //TODO Las de abajo faltan.

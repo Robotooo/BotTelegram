@@ -10,7 +10,7 @@ export interface pendiente{
     monto: string
 }
 
-export interface pagos{
+export interface pago{
     monto: string
     fechaModificacion: string
 }

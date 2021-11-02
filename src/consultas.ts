@@ -3,20 +3,24 @@ import { Telegraf } from "telegraf";
 import { rolesF } from './mappers/parametros';
 import { horario } from "./mappers/parametros";
 import { pendiente } from "./mappers/parametros";
+import { pago } from "./mappers/parametros";
 
 export class consultas{
 
     PagosEntreFechas(jwt:string, bot:Telegraf, chat:number, parametros:string[]){
-        axios.get('http://localhost:8089/cobros/PagosByCedulaAndFechasBetween/116380047/2021-08-01/2021-10-31'+parametros, 
+        axios.get('http://localhost:8089/cobros/PagosByCedulaAndFechasBetween/' +parametros[1] + '/' + parametros[2] + '/' + parametros[3],
+        //axios.get('http://localhost:8089/cobros/PagosByCedulaAndFechasBetween/116380047/2021-08-01/2021-10-31'+parametros, 
             {headers:{
                 Authorization: 'bearer ' + jwt,
             }}).then(function (result) {
-                let aux = result.data as Array<pendiente>
-                let total:number = 0
-                for(let i of aux){
-                    total = total + parseInt(i.monto)
+                let aux = result.data as Array<pago>
+                if(aux != null){
+                    bot.telegram.sendMessage(chat, "👤 Los pagos asignados a la cedula " + parametros[1] + " son los siguientes: ")
+                } else{ //este else es el que hay que revisar, cuando no hay pagos
+                    bot.telegram.sendMessage(chat, "No hay pagos asignados a la cedula " + parametros[1] + " entre las fechas " + parametros[2] + " " + parametros[3] + " 💸")
                 }
-                bot.telegram.sendMessage(chat, "El monto pendiente asignado a la cedula " + parametros + " es de " + String(total) +" colones 💰")
+                for(let i of aux)
+                bot.telegram.sendMessage(chat,"Monto: " + i.monto + " 💵 Fecha de cancelación: " + i.fechaModificacion + " ✔️")
             });
     }
 
@@ -30,7 +34,7 @@ export class consultas{
                 for(let i of aux){
                     total = total + parseInt(i.monto)
                 }
-                bot.telegram.sendMessage(chat, "El monto pendiente asignado a la cedula " + parametros + " es de " + String(total) +" colones 💰")
+                bot.telegram.sendMessage(chat, "El monto pendiente asignado a la cedula " + parametros + " es de " + String(total) + " colones 💰")
             });
     }
 
