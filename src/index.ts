@@ -17,7 +17,7 @@ const bodyParameters = {
 	password: "botcito"
 }
 
-function connect(nConsulta:number, chat:number, parametro:string, bot:Telegraf){
+function connect(nConsulta:number, chat:number, parametro:string[], bot:Telegraf){
 	var error = false
 	axios.interceptors.response.use(response=>{
 		return response
@@ -43,7 +43,7 @@ function connect(nConsulta:number, chat:number, parametro:string, bot:Telegraf){
 		error=false
 }
 
-function NumeroConsulta(nConsulta:number,jwt:string, nChat:number,botCommand:Telegraf, parametros:string){
+function NumeroConsulta(nConsulta:number,jwt:string, nChat:number, botCommand:Telegraf, parametros:string[]){
 	switch(nConsulta){
 		case 1:
 			bot.telegram.sendMessage(nChat,"⏳ Horario de atención al cliente ⏳")
@@ -65,22 +65,34 @@ bot.command('/inicio', async ctx => {
 	.then(response=>{
 		token = response.data as authF
 	})
-	ctx.reply("¡Hola "+ctx.from.first_name+"! Mi nombre es Roboto🤖, bienvenido al sistema de cobros de la municipalidad espero te encuentres bien, si deseas ver los comandos disponibles debes de digitar /help")
+	ctx.reply("¡Hola " + ctx.from.first_name + "! Mi nombre es Roboto🤖, bienvenido al sistema de cobros de la municipalidad espero te encuentres bien, si deseas ver los comandos disponibles debes de digitar /help")
 })
 
 bot.command('/horario', async ctx => {
-	var msg = ctx.message.text
-	connect(1, ctx.from.id, "2", bot)
+	var msg = ctx.message.text.split(" ")
+	msg[0] = "2"
+	connect(1, ctx.from.id, msg, bot)
 })
 
 bot.command('/help', async(ctx:any) => {
-	var msg = ctx.message.text
-	connect(2, ctx.from.id, "3", bot)
+	var msg = ctx.message.text.split(" ")
+	msg[0] = "3"
+	connect(2, ctx.from.id, msg, bot)
 })
 
 bot.command('/pendiente', async(ctx:any) => {
 	var msg = ctx.message.text.split(" ")
-	connect(3, ctx.from.id, msg[1], bot)
+	if(msg[1] != null){
+		connect(3, ctx.from.id, msg[1], bot)
+	} else{
+		ctx.reply("⚠️ Digite el número de cedula seguido del comando, para realizar la consulta")
+	}
+})
+
+bot.command('/pagos', async(ctx:any) => {
+	var msg = ctx.message.text.split(" ")
+	console.log(msg)
+	//connect(3, ctx.from.id, msg, bot)
 })
 
 //TODO Las de abajo faltan.
