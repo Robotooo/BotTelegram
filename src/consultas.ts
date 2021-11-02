@@ -1,7 +1,5 @@
-import { ifError } from "assert";
 import axios from "axios";
 import { Telegraf } from "telegraf";
-import { rolesF } from './mappers/parametros';
 import { horario } from "./mappers/parametros";
 import { pendiente } from "./mappers/parametros";
 import { pago } from "./mappers/parametros";
@@ -42,7 +40,6 @@ export class consultas{
 
     PagosEntreFechas(jwt:string, bot:Telegraf, chat:number, parametros:string[]){
         axios.get('http://localhost:8089/cobros/PagosByCedulaAndFechasBetween/' +parametros[1] + '/' + parametros[2] + '/' + parametros[3],
-        //axios.get('http://localhost:8089/cobros/PagosByCedulaAndFechasBetween/116380047/2021-08-01/2021-10-31'+parametros, 
             {headers:{
                 Authorization: 'bearer ' + jwt,
             }}).then(function (result) {

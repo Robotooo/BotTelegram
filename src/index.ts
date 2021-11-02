@@ -2,7 +2,8 @@ import { Telegraf, Telegram } from "telegraf"
 import axios, {AxiosResponse} from 'axios'
 import { authF } from './mappers/auth'
 import { consultas } from './consultas'
-const bot = new Telegraf('2069797539:AAFWwLYZjrftI4tHtoNVBMNIUE8m3PT_zHU')
+//const bot = new Telegraf('2069797539:AAFWwLYZjrftI4tHtoNVBMNIUE8m3PT_zHU') //bot andrey
+const bot = new Telegraf('2070457111:AAFfAWLLLEcSSuYv92gBbyRQkyanywVO930') //bot danah
 var token:authF, consultasNew = new consultas
 var flag:boolean = true
 
@@ -49,17 +50,16 @@ function NumeroConsulta(nConsulta:number,jwt:string, nChat:number, botCommand:Te
 			consultasNew.Parametros(jwt, botCommand,nChat, parametros)
 			break
 		case 2:
-
-			break
-		case 3:
 			consultasNew.CedPendiente(jwt, botCommand, nChat, parametros)
 			break
-		case 4:
+		case 3:
 			consultasNew.PagosEntreFechas(jwt, botCommand, nChat, parametros)
 			break
-		case 5:
+		case 4:
 			consultasNew.PendienteImpuesto(jwt, botCommand, nChat, parametros)
 			break
+		default:
+			break;
 	}
 }
 
@@ -75,7 +75,7 @@ bot.command('/inicio', async ctx => {
 bot.command('/formulas', async ctx => {
 	var msg = ctx.message.text.split(" ")
 	msg[0] = "1"
-	ctx.reply("🧮 Formulas de calculo de impuestos 🧮")
+	ctx.reply("🧮 Fórmulas de cálculo de impuestos 🧮")
 	connect(1, ctx.from.id, msg, bot)
 })
 
@@ -96,7 +96,7 @@ bot.command('/ayuda', async(ctx:any) => {
 bot.command('/pendiente', async(ctx:any) => {
 	var msg = ctx.message.text.split(" ")
 	if(msg[1] != null){
-		connect(3, ctx.from.id, msg[1], bot)
+		connect(2, ctx.from.id, msg[1], bot)
 	} else{
 		ctx.reply("⚠️ Digite el número de cedula seguido del comando para realizar la consulta")
 	}
@@ -105,7 +105,7 @@ bot.command('/pendiente', async(ctx:any) => {
 bot.command('/pagos', async(ctx:any) => {
 	var msg = ctx.message.text.split(" ")
 	if(msg[1] != null && msg[2] != null && msg[3] != null){
-		connect(4, ctx.from.id, msg, bot)
+		connect(3, ctx.from.id, msg, bot)
 	} else{
 		ctx.reply("⚠️ Digite los datos necesarios (cedula, fecha inicio, fecha final) seguido del comando para realizar la consulta")
 	}
@@ -115,31 +115,19 @@ bot.command('/impuesto', async(ctx:any) => {
 	var msg = ctx.message.text.split(" ")
 	if(msg[1] != null && msg[2] != null){
 		console.log(msg)
-		//connect(5, ctx.from.id, msg, bot)
+		connect(4, ctx.from.id, msg, bot)
 	} else{
 		ctx.reply("⚠️ Digite los datos necesarios (cedula, tipo de impuesto) seguido del comando para realizar la consulta")
 	}
 })
 
-//TODO Las de abajo faltan.
-
-// bot.on('message', async(ctx:any) => {
-// 	var msg = ctx.message.text
-// 	if(true){
-// 	flag=false
-// 	}
-// })
-
-// bot.command('/licencia', async(ctx:any) => {
-// 	var msg = ctx.message.text
-// })
-
-// bot.command('/limpieza', async ctx => {
-// 	var msg = ctx.message.text
-// })
-
-// bot.command('/rutas', async(ctx:any) => {
-// 	var msg = ctx.message.text
-// })
+/*
+bot.on('message', async(ctx:any) => {
+ 	var msg = ctx.message.text
+ 	if(true){
+ 		flag=false
+	}
+}) 
+*/
 
 bot.launch()
