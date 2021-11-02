@@ -84,7 +84,7 @@ export class consultas{
     Roles(jwt:string, bot:Telegraf, chat:number, parametros:string[]){
         axios.get('http://localhost:8089/roles/id/1', 
         {headers:{
-            Authorization: 'bearer ' + jwt,
+            Authorization: 'bearer ' + jwt, 
         }}).then(response => {
             let aux = response.data as rolesF
             bot.telegram.sendMessage(chat,aux.nombre)

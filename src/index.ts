@@ -2,7 +2,7 @@ import { Telegraf, Telegram } from "telegraf"
 import axios, {AxiosResponse} from 'axios'
 import { authF } from './mappers/auth'
 import { consultas } from './consultas'
-const bot = new Telegraf('2070457111:AAFfAWLLLEcSSuYv92gBbyRQkyanywVO930')
+const bot = new Telegraf('2069797539:AAFWwLYZjrftI4tHtoNVBMNIUE8m3PT_zHU')
 var token:authF, consultasNew = new consultas
 var flag:boolean = true
 
@@ -46,12 +46,10 @@ function connect(nConsulta:number, chat:number, parametro:string[], bot:Telegraf
 function NumeroConsulta(nConsulta:number,jwt:string, nChat:number, botCommand:Telegraf, parametros:string[]){
 	switch(nConsulta){
 		case 1:
-			bot.telegram.sendMessage(nChat,"⏳ Horario de atención al cliente ⏳")
 			consultasNew.Parametros(jwt, botCommand,nChat, parametros)
 			break
 		case 2:
-			bot.telegram.sendMessage(nChat,"Comandos de Roboto🤖")
-			consultasNew.Parametros(jwt, botCommand, nChat, parametros)
+			
 			break
 		case 3:
 			consultasNew.CedPendiente(jwt, botCommand, nChat, parametros)
@@ -71,19 +69,28 @@ bot.command('/inicio', async ctx => {
 	.then(response=>{
 		token = response.data as authF
 	})
-	ctx.reply("¡Hola " + ctx.from.first_name + "! Mi nombre es Roboto🤖, bienvenido al sistema de cobros de la municipalidad espero te encuentres bien, si deseas ver los comandos disponibles debes de digitar /help")
+	ctx.reply("¡Hola " + ctx.from.first_name + "! Mi nombre es Roboto🤖, bienvenido al sistema de cobros de la municipalidad espero te encuentres bien, si deseas ver los comandos disponibles debes de digitar /ayuda")
+})
+
+bot.command('/formulas', async ctx => {
+	var msg = ctx.message.text.split(" ")
+	msg[0] = "1"
+	ctx.reply("🧮 Formulas de calculo de impuestos 🧮")
+	connect(1, ctx.from.id, msg, bot)
 })
 
 bot.command('/horario', async ctx => {
 	var msg = ctx.message.text.split(" ")
 	msg[0] = "2"
+	ctx.reply("⏳ Horario de atención al cliente ⏳")
 	connect(1, ctx.from.id, msg, bot)
 })
 
-bot.command('/help', async(ctx:any) => {
+bot.command('/ayuda', async(ctx:any) => {
 	var msg = ctx.message.text.split(" ")
 	msg[0] = "3"
-	connect(2, ctx.from.id, msg, bot)
+	ctx.reply("Comandos de Roboto🤖")
+	connect(1, ctx.from.id, msg, bot)
 })
 
 bot.command('/pendiente', async(ctx:any) => {
