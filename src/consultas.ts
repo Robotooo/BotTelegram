@@ -27,9 +27,9 @@ export class consultas{
                 Authorization: 'bearer ' + jwt,
             }}).then(function (result) {
                 let aux = result.data as Array<pago>
-                if(aux != null){  //este else es el que hay que revisar, cuando no hay pagos
-                    bot.telegram.sendMessage(chat, "No hay pagos asignados a la cedula " + parametros[1] + " por el tipo de impuesto de " + tipo + " 💸")
-                }
+                //if(aux != null){  //este else es el que hay que revisar, cuando no hay pagos
+                //    bot.telegram.sendMessage(chat, "No hay pagos asignados a la cedula " + parametros[1] + " por el tipo de impuesto de " + tipo + " 💸")
+                //}
                 for(let i of aux){
                     total = total + parseInt(i.monto)
                 }
@@ -44,54 +44,28 @@ export class consultas{
                 Authorization: 'bearer ' + jwt,
             }}).then(function (result) {
                 let aux = result.data as Array<pago>
-                if(aux != null){
+                //if(aux != null){
                     bot.telegram.sendMessage(chat, "👤 Los pagos asignados a la cedula " + parametros[1] + " son los siguientes: ")
-                } else{ //este else es el que hay que revisar, cuando no hay pagos
-                    bot.telegram.sendMessage(chat, "No hay pagos asignados a la cedula " + parametros[1] + " entre las fechas " + parametros[2] + " " + parametros[3] + " 💸")
-                }
+                //} else { //este else es el que hay que revisar, cuando no hay pagos
+                    //bot.telegram.sendMessage(chat, "No hay pagos asignados a la cedula " + parametros[1] + " entre las fechas " + parametros[2] + " " + parametros[3] + " 💸")
+                //}
                 for(let i of aux)
                 bot.telegram.sendMessage(chat,"Monto: " + i.monto + " 💵 Fecha de cancelación: " + i.fechaModificacion + " ✔️")
             });
     } 
   
-    // CedPendiente(jwt:string, bot:Telegraf, chat:number, parametros:string[]){
-    //     axios.get('http://localhost:8089/cobros/CobroByCedula/'+parametros, 
-    //     {headers:{
-    //         Authorization: 'bearer ' + jwt,
-    //     }}).then(function (result) {
-    //         let aux = result.data as Array<pendiente>
-    //         let total:number = 0
-    //         for(let i of aux){
-    //             total = total + parseInt(i.monto)
-    //         }
-    //         bot.telegram.sendMessage(chat, "El monto pendiente asignado a la cedula " + parametros + " es de " + String(total) +" colones 💰")
-    //     });
-    // }
-
     CedPendiente(jwt:string, bot:Telegraf, chat:number, parametros:string[]){
-        axios.get('http://localhost:8089/cobros/CobroByCedula/' + parametros, 
-            {headers:{
-                Authorization: 'bearer ' + jwt,
-            }}).then(function (result) {
-                var flag:boolean = true
-                if(result){
-                    let aux = result.data as Array<pendiente>
-                    let total:number = 0
-                    if(aux != null){
-                        for(let i of aux){
-                            total = total + parseInt(i.monto)
-                        }
-                    }else if(result.data===undefined){
-                        bot.telegram.sendMessage(chat, "No hay pendientes asignados a la cedula " + parametros[1] + " 💸")
-                    }
-                    if(total!=0){
-                        bot.telegram.sendMessage(chat, "El monto pendiente asignado a la cedula " + parametros + " es de " + String(total) + " colones 💰")
-                    }
-                }else{
-                    bot.telegram.sendMessage(chat, "La cedula no posee ningun pendiente asignado 💰")
-                    throw new Error("Not implemented yet!");
-                }
-            })
+        axios.get('http://localhost:8089/cobros/CobroByCedula/'+parametros, 
+        {headers:{
+            Authorization: 'bearer ' + jwt,
+        }}).then(function (result) {
+            let aux = result.data as Array<pendiente>
+            let total:number = 0
+            for(let i of aux){
+                total = total + parseInt(i.monto)
+            }
+            bot.telegram.sendMessage(chat, "El monto pendiente asignado a la cedula " + parametros + " es de " + String(total) +" colones 💰")
+        });
     }
 
     Parametros(jwt:string, bot:Telegraf, chat:number, parametros:string[]){
