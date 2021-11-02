@@ -4,6 +4,8 @@ import { authF } from './mappers/auth'
 import { consultas } from './consultas'
 const bot = new Telegraf('2069797539:AAFWwLYZjrftI4tHtoNVBMNIUE8m3PT_zHU')
 var token:authF, consultasNew = new consultas
+var flag:boolean = true
+ 
 
 const configHeader = {
     headers: { 
@@ -16,7 +18,7 @@ const bodyParameters = {
 	password: "botcito"
  }
 
-function connect(consulta:number, chat:number, parametro:string, bot:Telegraf){
+function connect(nConsulta:number, chat:number, parametro:string, bot:Telegraf){
 	var error = false
 	axios.interceptors.response.use(response=>{
 		return response
@@ -30,14 +32,14 @@ function connect(consulta:number, chat:number, parametro:string, bot:Telegraf){
 			.then(response=>{
 				var botToken=response.data as authF
 				token.jwt = botToken.jwt
-				NumeroConsulta(consulta, botToken.jwt, chat, bot, parametro);
+				NumeroConsulta(nConsulta, botToken.jwt, chat, bot, parametro);
 			}).catch(err=>{console.log(err,err.response)})
 				error=true
 		}else{
-			NumeroConsulta(consulta, token.jwt, chat, bot, parametro)
+			NumeroConsulta(nConsulta, token.jwt, chat, bot, parametro)
 		}})
 		if(!error){
-			NumeroConsulta(consulta, token.jwt, chat, bot, parametro)
+			NumeroConsulta(nConsulta, token.jwt, chat, bot, parametro)
 		} 
 		error=false
 }
@@ -48,7 +50,7 @@ function NumeroConsulta(nConsulta:number,jwt:string, nChat:number,botCommand:Tel
 			consultasNew.Horario(jwt,botCommand,nChat,parametros)
 			break
 		case 2:
-			consultasNew.Roles(jwt,botCommand,nChat,parametros)
+			consultasNew.Help(jwt,botCommand,nChat,parametros)
 			break
 	}
 }
@@ -75,35 +77,40 @@ bot.command('/help', async(ctx:any) => {
 
 //TODO Las de abajo faltan.
 
+// bot.on('message', async(ctx:any) => {
+// 	var msg = ctx.message.text
+// 	if(true){
+// 	flag=false
+// 	}
+// })
+
+
+// bot.start(async(ctx)=>{
+// 	ctx.reply("d")
+// 	axios.post('http://localhost:8089/autentication/', bodyParameters, configHeader)
+// 	.then(response=>{
+// 		token = response.data as authF
+// 	})
+// })
 
 
 
-bot.start(async(ctx)=>{
-	ctx.reply("d")
-	axios.post('http://localhost:8089/autentication/', bodyParameters, configHeader)
-	.then(response=>{
-		token = response.data as authF
-	})
-})
 
 
+// bot.command('/licencia', async(ctx:any) => {
+// 	var msg = ctx.message.text
+// })
 
+// bot.command('/limpieza', async ctx => {
+// 	var msg = ctx.message.text
+// })
 
+// bot.command('/rutas', async(ctx:any) => {
+// 	var msg = ctx.message.text
+// })
 
-bot.command('/licencia', async(ctx:any) => {
-	var msg = ctx.message.text
-})
-
-bot.command('/limpieza', async ctx => {
-	var msg = ctx.message.text
-})
-
-bot.command('/rutas', async(ctx:any) => {
-	var msg = ctx.message.text
-})
-
-bot.command('/pendiente', async(ctx:any) => {
-	var msg = ctx.message.text
-})
+// bot.command('/pendiente', async(ctx:any) => {
+// 	var msg = ctx.message.text
+// })
 
 bot.launch()

@@ -3,5 +3,5 @@ export interface rolesF{
 }
 
 export interface horario{
-    descripcion: string[]
+    descripcion: string
 }
