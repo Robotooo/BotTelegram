@@ -2,10 +2,9 @@ import { Telegraf, Telegram } from "telegraf"
 import axios, {AxiosResponse} from 'axios'
 import { authF } from './mappers/auth'
 import { consultas } from './consultas'
-const bot = new Telegraf('2069797539:AAFWwLYZjrftI4tHtoNVBMNIUE8m3PT_zHU')
+const bot = new Telegraf('2070457111:AAFfAWLLLEcSSuYv92gBbyRQkyanywVO930')
 var token:authF, consultasNew = new consultas
 var flag:boolean = true
- 
 
 const configHeader = {
     headers: { 
@@ -16,7 +15,7 @@ const configHeader = {
 const bodyParameters = {
 	cedula: "roboto",
 	password: "botcito"
- }
+}
 
 function connect(nConsulta:number, chat:number, parametro:string, bot:Telegraf){
 	var error = false
@@ -47,10 +46,15 @@ function connect(nConsulta:number, chat:number, parametro:string, bot:Telegraf){
 function NumeroConsulta(nConsulta:number,jwt:string, nChat:number,botCommand:Telegraf, parametros:string){
 	switch(nConsulta){
 		case 1:
+			bot.telegram.sendMessage(nChat,"⏳ Horario de atención al cliente ⏳")
 			consultasNew.Parametros(jwt,botCommand,nChat,parametros)
 			break
 		case 2:
+			bot.telegram.sendMessage(nChat,"Comandos de Roboto🤖")
 			consultasNew.Parametros(jwt,botCommand,nChat,parametros)
+			break
+		case 3:
+			consultasNew.CedPendiente(jwt,botCommand,nChat,parametros)
 			break
 	}
 }
@@ -74,6 +78,10 @@ bot.command('/help', async(ctx:any) => {
 	connect(2, ctx.from.id, "3", bot)
 })
 
+bot.command('/pendiente', async(ctx:any) => {
+	var msg = ctx.message.text.split(" ")
+	connect(3, ctx.from.id, msg[1], bot)
+})
 
 //TODO Las de abajo faltan.
 
@@ -84,19 +92,6 @@ bot.command('/help', async(ctx:any) => {
 // 	}
 // })
 
-
-// bot.start(async(ctx)=>{
-// 	ctx.reply("d")
-// 	axios.post('http://localhost:8089/autentication/', bodyParameters, configHeader)
-// 	.then(response=>{
-// 		token = response.data as authF
-// 	})
-// })
-
-
-
-
-
 // bot.command('/licencia', async(ctx:any) => {
 // 	var msg = ctx.message.text
 // })
@@ -106,10 +101,6 @@ bot.command('/help', async(ctx:any) => {
 // })
 
 // bot.command('/rutas', async(ctx:any) => {
-// 	var msg = ctx.message.text
-// })
-
-// bot.command('/pendiente', async(ctx:any) => {
 // 	var msg = ctx.message.text
 // })
 

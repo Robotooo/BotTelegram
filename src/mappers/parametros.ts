@@ -5,3 +5,7 @@ export interface rolesF{
 export interface horario{
     descripcion: string
 }
+
+export interface pendiente{
+    monto: string
+}
