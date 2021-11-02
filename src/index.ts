@@ -2,11 +2,10 @@ import { Telegraf, Telegram } from "telegraf"
 import axios, {AxiosResponse} from 'axios'
 import { authF } from './mappers/auth'
 import { consultas } from './consultas'
-//import { start } from "repl"
-const bot = new Telegraf('2070457111:AAFfAWLLLEcSSuYv92gBbyRQkyanywVO930')
-var token:authF, consultasNew = new consultas;
+const bot = new Telegraf('2069797539:AAFWwLYZjrftI4tHtoNVBMNIUE8m3PT_zHU')
+var token:authF, consultasNew = new consultas
 
-const config = {
+const configHeader = {
     headers: { 
 		'Content-Type': 'application/json'
 	}
@@ -17,120 +16,94 @@ const bodyParameters = {
 	password: "botcito"
  }
 
-function conect(consulta:number, chat:number, parametro:string, bot:Telegraf){
-	var error = false;
+function connect(consulta:number, chat:number, parametro:string, bot:Telegraf){
+	var error = false
 	axios.interceptors.response.use(response=>{
 		return response
 	},
-	err=>{const{config,response:{status, data}}=err;
-	console.log("entra el err")
-		const requestAu = config;
+	err =>{
+		const{
+			config,response:{
+				status,data}}=err
 		if(status==401){
-			axios.post('http://localhost:8089/autentication/', bodyParameters, config)
-			.then((response)=>{
-				// token = response.data as authF
-				var tokenBot = response.data as authF
-				token.jwt = tokenBot.jwt  
-				NumeroConsulta(consulta,tokenBot.jwt,chat,bot,parametro)
-				console.log(response.status)
-				console.log("lol")
-				console.log("token---------" + tokenBot.jwt)
+			axios.post('http://localhost:8089/autentication/', bodyParameters, configHeader)
+			.then(response=>{
+				var botToken=response.data as authF
+				token.jwt = botToken.jwt
+				NumeroConsulta(consulta, botToken.jwt, chat, bot, parametro);
 			}).catch(err=>{console.log(err,err.response)})
-			error=true;
+				error=true
 		}else{
-			console.log("Logueado")
 			NumeroConsulta(consulta, token.jwt, chat, bot, parametro)
 		}})
 		if(!error){
 			NumeroConsulta(consulta, token.jwt, chat, bot, parametro)
-		}
-	error=false;
+		} 
+		error=false
 }
-
-/*function conect(consulta:number, chat:number, parametro:string){
-	
-	axios.post('http://localhost:8089/autentication/', bodyParameters, config)
-	.then((response)=>{
-		////token = response.data as authF
-		////var aux:string
-		//aux=token.jwt
-		//aux=token.jwt
-		//aux=token.jwt
-		//console.log(response.status)
-		//console.log(aux)
-		var tokenBot = response.data as authF
-		console.log(tokenBot)
-		NumeroConsulta(consulta,tokenBot.jwt,chat,bot,parametro)
-		console.log(response.status)
-		console.log("lol")
-	},(error)=>{
-		console.log("error:"+error)
-	})
-}*/
 
 function NumeroConsulta(nConsulta:number,jwt:string, nChat:number,botCommand:Telegraf, parametros:string){
 	switch(nConsulta){
 		case 1:
+			consultasNew.Horario(jwt,botCommand,nChat,parametros)
+			break
+		case 2:
 			consultasNew.Roles(jwt,botCommand,nChat,parametros)
-			console.log("finito")
 			break
 	}
 }
-function startBot(){
-	axios.post('http://localhost:8089/autentication/', bodyParameters, config)
+
+bot.command('/inicio', async ctx => {
+	var msg = ctx.message.text
+	axios.post('http://localhost:8089/autentication/', bodyParameters, configHeader)
 	.then(response=>{
 		token = response.data as authF
 	})
-}
-
-bot.hears("a",async(ctx)=>{
-	startBot()
-	ctx.reply("ola")
-	ctx.reply('Bienvenido, Digita /help para visualizar los comandos disponibles')
+	ctx.reply("¡Hola "+ctx.from.first_name+"! Mi nombre es Roboto🤖, bienvenido al sistema de cobros de la municipalidad espero te encuentres bien, si deseas ver los comandos disponibles debes de digitar /help")
 })
 
+bot.command('/horario', async ctx => {
+	var msg = ctx.message.text
+	connect(1, ctx.from.id, msg, bot)
+})
 
 bot.command('/help', async(ctx:any) => {
 	var msg = ctx.message.text
-	ctx.reply("/horario Devuelve el horario de la empresa\n/licencia Devuelve la formula de licencias comerciales\n" +
-	"/limpieza Devuelve la formula limpieza de vias\n/rutas Devuelve la formula rutas de buses\n" +
-	"/pendiente cedula Devuelve los pendientes asociados a una cedula")
+	connect(2, ctx.from.id, msg, bot)
 })
 
-bot.command('/horario', async(ctx:any) => {
-	var msg = ctx.message.text
-	var parametro = msg.split(' ')
-	conect(1, ctx.from.id, parametro, bot)
+
+//TODO Las de abajo faltan.
+
+
+
+
+bot.start(async(ctx)=>{
+	ctx.reply("d")
+	axios.post('http://localhost:8089/autentication/', bodyParameters, configHeader)
+	.then(response=>{
+		token = response.data as authF
+	})
 })
+
+
+
+
 
 bot.command('/licencia', async(ctx:any) => {
 	var msg = ctx.message.text
-	//conect(1,"")
-	// axios.get('http://localhost:8089/roles/all',{headers: {
-	// 	Authorization: 'bearer ' + token.jwt,
-	// }}).then(resp => {
-	// 	ctx.reply(resp.data)
-	// 	console.log(resp.data)
-	// });
 })
 
-bot.command('/limpieza', async(ctx:any) => {
+bot.command('/limpieza', async ctx => {
 	var msg = ctx.message.text
-	//conect(1,ctx,"")
 })
 
 bot.command('/rutas', async(ctx:any) => {
 	var msg = ctx.message.text
-	//conect(1,ctx,"")
 })
 
 bot.command('/pendiente', async(ctx:any) => {
 	var msg = ctx.message.text
-	//conect(1,ctx,"")
 })
-
-bot.start((ctx: any) => ctx.reply(
-	'Bienvenido , '+ ctx.nombre + ' Digita /help para visualizar los comandos disponibles'
-	))
 
 bot.launch()
