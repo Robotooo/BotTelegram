@@ -6,19 +6,19 @@ import { horario } from "./mappers/parametros";
 export class consultas{
 
 
-    Horario(jwt:string, bot:Telegraf, chat:number, parametros:string){
-        axios.get('http://localhost:8089/parametros/valor/valor?valor=2', 
-            {headers:{
-                Authorization: 'bearer ' + jwt,
-            }}).then(function (result) {
-                let aux = result.data as Array<horario>
-                for(let i of aux)
-                bot.telegram.sendMessage(chat,i.descripcion)
-            });
-    }
+    // Horario(jwt:string, bot:Telegraf, chat:number, parametros:string){
+    //     axios.get('http://localhost:8089/parametros/valor/valor?valor=2', 
+    //         {headers:{
+    //             Authorization: 'bearer ' + jwt,
+    //         }}).then(function (result) {
+    //             let aux = result.data as Array<horario>
+    //             for(let i of aux)
+    //             bot.telegram.sendMessage(chat,i.descripcion)
+    //         });
+    // }
 
-    Help(jwt:string, bot:Telegraf, chat:number, parametros:string){
-        axios.get('http://localhost:8089/parametros/valor/valor?valor=3', 
+    Parametros(jwt:string, bot:Telegraf, chat:number, parametros:string){
+        axios.get('http://localhost:8089/parametros/valor/valor?valor='+parametros, 
             {headers:{
                 Authorization: 'bearer ' + jwt,
             }}).then(function (result) {

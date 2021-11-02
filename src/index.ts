@@ -47,10 +47,10 @@ function connect(nConsulta:number, chat:number, parametro:string, bot:Telegraf){
 function NumeroConsulta(nConsulta:number,jwt:string, nChat:number,botCommand:Telegraf, parametros:string){
 	switch(nConsulta){
 		case 1:
-			consultasNew.Horario(jwt,botCommand,nChat,parametros)
+			consultasNew.Parametros(jwt,botCommand,nChat,parametros)
 			break
 		case 2:
-			consultasNew.Help(jwt,botCommand,nChat,parametros)
+			consultasNew.Parametros(jwt,botCommand,nChat,parametros)
 			break
 	}
 }
@@ -66,12 +66,12 @@ bot.command('/inicio', async ctx => {
 
 bot.command('/horario', async ctx => {
 	var msg = ctx.message.text
-	connect(1, ctx.from.id, msg, bot)
+	connect(1, ctx.from.id, "2", bot)
 })
 
 bot.command('/help', async(ctx:any) => {
 	var msg = ctx.message.text
-	connect(2, ctx.from.id, msg, bot)
+	connect(2, ctx.from.id, "3", bot)
 })
 
 
