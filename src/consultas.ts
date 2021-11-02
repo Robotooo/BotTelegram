@@ -8,7 +8,35 @@ import { pago } from "./mappers/parametros";
 export class consultas{
 
     PendienteImpuesto(jwt:string, bot:Telegraf, chat:number, parametros:string[]){
-
+        var url = ""
+        var tipo = ""
+        let total:number = 0
+        if(parametros[2] == "1"){
+            tipo = "licencia comercial"
+            url = 'http://localhost:8089/cobros/CobroByCedulaLicencias/' + parametros[1]
+        }
+        if(parametros[2] == "2"){
+            tipo = "limpieza de vías"
+            url = 'http://localhost:8089/cobros/CobroByCedulaPropiedades/' + parametros[1]
+        }
+        if(parametros[2] == "3"){
+            tipo = "ruta de bus"
+            url = 'http://localhost:8089/cobros/CobroByCedulaRutas/' + parametros[1]
+        }
+        axios.get(url,
+            {headers:{
+                Authorization: 'bearer ' + jwt,
+            }}).then(function (result) {
+                let aux = result.data as Array<pago>
+                if(aux != null){  //este else es el que hay que revisar, cuando no hay pagos
+                    bot.telegram.sendMessage(chat, "No hay pagos asignados a la cedula " + parametros[1] + " por el tipo de impuesto de " + tipo + " 💸")
+                }
+                for(let i of aux){
+                    total = total + parseInt(i.monto)
+                }
+                bot.telegram.sendMessage(chat, "El monto pendiente asignado a la cedula " + parametros[1] + " por el tipo de impuesto de " + tipo + " es de " + String(total) + " colones 💰")
+                
+            });
     }
 
     PagosEntreFechas(jwt:string, bot:Telegraf, chat:number, parametros:string[]){
@@ -29,7 +57,7 @@ export class consultas{
     }
 
     CedPendiente(jwt:string, bot:Telegraf, chat:number, parametros:string[]){
-        axios.get('http://localhost:8089/cobros/CobroByCedula/'+parametros, 
+        axios.get('http://localhost:8089/cobros/CobroByCedula/' + parametros, 
             {headers:{
                 Authorization: 'bearer ' + jwt,
             }}).then(function (result) {
@@ -43,13 +71,13 @@ export class consultas{
     }
 
     Parametros(jwt:string, bot:Telegraf, chat:number, parametros:string[]){
-        axios.get('http://localhost:8089/parametros/valor/valor?valor='+parametros, 
+        axios.get('http://localhost:8089/parametros/valor/valor?valor=' + parametros, 
             {headers:{
                 Authorization: 'bearer ' + jwt,
             }}).then(function (result) {
                 let aux = result.data as Array<horario>
                 for(let i of aux)
-                bot.telegram.sendMessage(chat,i.descripcion)
+                bot.telegram.sendMessage(chat, i.descripcion)
             });
     }
 
