@@ -49,7 +49,7 @@ function NumeroConsulta(nConsulta:number,jwt:string, nChat:number, botCommand:Te
 			consultasNew.Parametros(jwt, botCommand,nChat, parametros)
 			break
 		case 2:
-			
+
 			break
 		case 3:
 			consultasNew.CedPendiente(jwt, botCommand, nChat, parametros)

@@ -1,3 +1,4 @@
+import { ifError } from "assert";
 import axios from "axios";
 import { Telegraf } from "telegraf";
 import { rolesF } from './mappers/parametros';
@@ -54,20 +55,20 @@ export class consultas{
                 for(let i of aux)
                 bot.telegram.sendMessage(chat,"Monto: " + i.monto + " 💵 Fecha de cancelación: " + i.fechaModificacion + " ✔️")
             });
-    }
-
+    } 
+  
     CedPendiente(jwt:string, bot:Telegraf, chat:number, parametros:string[]){
-        axios.get('http://localhost:8089/cobros/CobroByCedula/' + parametros, 
-            {headers:{
-                Authorization: 'bearer ' + jwt,
-            }}).then(function (result) {
-                let aux = result.data as Array<pendiente>
-                let total:number = 0
-                for(let i of aux){
-                    total = total + parseInt(i.monto)
-                }
-                bot.telegram.sendMessage(chat, "El monto pendiente asignado a la cedula " + parametros + " es de " + String(total) + " colones 💰")
-            });
+        axios.get('http://localhost:8089/cobros/CobroByCedula/'+parametros, 
+        {headers:{
+            Authorization: 'bearer ' + jwt,
+        }}).then(function (result) {
+            let aux = result.data as Array<pendiente>
+            let total:number = 0
+            for(let i of aux){
+                total = total + parseInt(i.monto)
+            }
+            bot.telegram.sendMessage(chat, "El monto pendiente asignado a la cedula " + parametros + " es de " + String(total) +" colones 💰")
+        });
     }
 
     Parametros(jwt:string, bot:Telegraf, chat:number, parametros:string[]){
@@ -81,27 +82,4 @@ export class consultas{
             });
     }
 
-    Roles(jwt:string, bot:Telegraf, chat:number, parametros:string[]){
-        axios.get('http://localhost:8089/roles/id/1', 
-        {headers:{
-            Authorization: 'bearer ' + jwt, 
-        }}).then(response => {
-            let aux = response.data as rolesF
-            bot.telegram.sendMessage(chat,aux.nombre)
-        }).catch(err => {
-            console.log(err, err.response);
-        })
-    }
-
-    // Horario(jwt:string, bot:Telegraf, chat:number, parametros:string){
-    //     axios.get('http://localhost:8089/parametros/valor/valor?valor=2', 
-    //         {headers:{
-    //             Authorization: 'bearer ' + jwt,
-    //         }}).then(function (result) {
-    //             let aux = result.data as Array<horario>
-    //             for(let i of aux)
-    //             bot.telegram.sendMessage(chat,i.descripcion)
-    //         });
-    // }
-    
 } 
